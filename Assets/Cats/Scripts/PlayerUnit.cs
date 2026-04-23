@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerUnit : MonoBehaviour
 {
     public float placementRadius = 0.5f;
+    public int cost = 10;
 
     [Header("Health")]
     public float maxHealth = 20f;

@@ -14,6 +14,20 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
     }
+    public bool CanAfford(PlayerUnit unit)
+    {
+        return BaseUnit.Instance.storedGold >= unit.cost;
+    }
+
+    public void SpendGold(int amount)
+    {
+        BaseUnit.Instance.storedGold -= amount;
+    }
+
+    public void AddGold(int amount)
+    {
+        BaseUnit.Instance.storedGold += amount;
+    }
 
     private void Start()
     {
@@ -97,9 +111,14 @@ public class GameManager : MonoBehaviour
 
     void PlaceUnit(Vector3 position)
     {
-        // Lock Y to ground level (important!)
-        position.y = 0f;
+        PlayerUnit unit = selectedUnitPrefab;
 
-        Instantiate(selectedUnitPrefab, position, Quaternion.identity);
+        if (!CanAfford(unit))
+            return;
+
+        SpendGold(unit.cost);
+
+        position.y = 0f;
+        Instantiate(unit, position, Quaternion.identity);
     }
 }
