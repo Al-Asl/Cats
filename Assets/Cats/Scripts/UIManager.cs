@@ -1,27 +1,50 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
+
+[System.Serializable]
+public class UnitButton
+{
+    public Button button;
+    public PlayerUnit unitPrefab;
+
+    [HideInInspector] public bool isSelected;
+
+    public void SetSelected(bool selected)
+    {
+        isSelected = selected;
+
+        // Disable interaction when selected
+        button.interactable = !selected;
+    }
+}
 
 public class UIManager : MonoBehaviour
 {
     [Header("UI")]
     public TextMeshProUGUI goldText;
 
-    [Header("Unit Toggles")]
-    public Toggle workerToggle;
-    public Toggle rangeToggle;
+    [Header("Unit Buttons")]
+    public List<UnitButton> unitButtons;
 
-    [Header("Unit Prefabs")]
-    public PlayerUnit workerPrefab;
-    public PlayerUnit rangePrefab;
+    private UnitButton currentSelected;
 
     private void Start()
     {
-        workerToggle.onValueChanged.AddListener(OnWorkerToggle);
-        rangeToggle.onValueChanged.AddListener(OnRangeToggle);
+        // Assign listeners dynamically
+        foreach (var ub in unitButtons)
+        {
+            UnitButton captured = ub;
 
-        rangeToggle.isOn = true;
-        SelectUnit(rangePrefab);
+            ub.button.onClick.AddListener(() => OnUnitButtonClicked(captured));
+        }
+
+        // Default selection (first one or pick manually)
+        if (unitButtons.Count > 0)
+        {
+            SelectButton(unitButtons[0]);
+        }
     }
 
     private void Update()
@@ -38,36 +61,35 @@ public class UIManager : MonoBehaviour
     }
 
     // =========================
-    // TOGGLE EVENTS
+    // BUTTON GROUP LOGIC
     // =========================
 
-    void OnWorkerToggle(bool isOn)
+    void OnUnitButtonClicked(UnitButton clicked)
     {
-        if (!isOn) return;
-
-        SelectUnit(workerPrefab);
+        SelectButton(clicked);
     }
 
-    void OnRangeToggle(bool isOn)
+    void SelectButton(UnitButton selected)
     {
-        if (!isOn) return;
-
-        SelectUnit(rangePrefab);
-    }
-
-    // =========================
-    // UNIT SELECTION
-    // =========================
-
-    void SelectUnit(PlayerUnit unit)
-    {
-        if (GameManager.Instance == null || unit == null)
+        if (selected == null || GameManager.Instance == null)
             return;
 
-        if (!GameManager.Instance.CanAfford(unit))
-            Debug.Log("Not enough gold for: " + unit.name);
+        // Deselect all
+        foreach (var ub in unitButtons)
+        {
+            ub.SetSelected(false);
+        }
 
-        GameManager.Instance.selectedUnitPrefab = unit;
+        // Select this one
+        selected.SetSelected(true);
+        currentSelected = selected;
 
+        // Gameplay logic
+        if (!GameManager.Instance.CanAfford(selected.unitPrefab))
+        {
+            Debug.Log("Not enough gold for: " + selected.unitPrefab.name);
+        }
+
+        GameManager.Instance.selectedUnitPrefab = selected.unitPrefab;
     }
 }
