@@ -8,6 +8,7 @@ public class EnemySpawner : MonoBehaviour
     public GameObject enemyPrefab;
     public float spawnInterval = 2f;
     public bool autoStart = true;
+    public int enemyNumber = 10;
 
     [Header("Edge Definition")]
     public Transform startPoint;
@@ -26,6 +27,13 @@ public class EnemySpawner : MonoBehaviour
         while (true)
         {
             SpawnEnemy();
+
+            if(--enemyNumber < 1)
+            {
+                Destroy(gameObject);
+                yield break;
+            }
+
             yield return new WaitForSeconds(spawnInterval);
         }
     }

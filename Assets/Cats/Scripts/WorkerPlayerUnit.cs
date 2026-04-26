@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Linq;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class WorkerPlayerUnit : PlayerUnit
@@ -35,9 +36,6 @@ public class WorkerPlayerUnit : PlayerUnit
 
     private void Start()
     {
-        targetMine = FindObjectOfType<MineUnit>();
-        baseUnit = BaseUnit.Instance;
-
         state = State.ToMine;
     }
 
@@ -52,6 +50,30 @@ public class WorkerPlayerUnit : PlayerUnit
             case State.ToBase:
                 HandleBase();
                 break;
+
+            case State.Idle:
+                HandleIdle();
+                break;
+        }
+    }
+
+    void HandleIdle()
+    {
+        if(carriedGold > 0)
+        {
+            var bases = FindObjectsByType<BaseUnit>(FindObjectsSortMode.None);
+            baseUnit = bases.Aggregate((a, b) => { return Distance(a) < Distance(b) ? a : b; });
+
+            if (baseUnit != null)
+                state = State.ToBase;
+        }
+        else
+        {
+            var mines = FindObjectsByType<MineUnit>(FindObjectsSortMode.None);
+            targetMine = mines.Aggregate((a, b) => { return Distance(a) < Distance(b) ? a : b; });
+
+            if (targetMine != null)
+                state = State.ToMine;
         }
     }
 
@@ -75,10 +97,18 @@ public class WorkerPlayerUnit : PlayerUnit
         }
     }
 
+    private float Distance(Component other)
+    {
+        return Vector3.Distance(transform.position, other.transform.position);
+    }
+
     void HandleBase()
     {
         if (baseUnit == null)
+        {
+            state = State.Idle;
             return;
+        }
 
         agent.isStopped = false;
         agent.SetDestination(baseUnit.transform.position);

@@ -4,6 +4,8 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
+    public int gold;
+
     [Header("Placement")]
     public PlayerUnit selectedUnitPrefab;
     public LayerMask placementAreaMask;
@@ -16,17 +18,17 @@ public class GameManager : MonoBehaviour
     }
     public bool CanAfford(PlayerUnit unit)
     {
-        return BaseUnit.Instance.storedGold >= unit.cost;
+        return gold >= unit.cost;
     }
 
     public void SpendGold(int amount)
     {
-        BaseUnit.Instance.storedGold -= amount;
+        gold -= amount;
     }
 
     public void AddGold(int amount)
     {
-        BaseUnit.Instance.storedGold += amount;
+        gold += amount;
     }
 
     private void Start()

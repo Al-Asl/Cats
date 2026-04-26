@@ -1,9 +1,13 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class MeleeEnemy : EnemyUnit
 {
+    public UnityEvent onStop;
+    public UnityEvent onWalk;
+
     public float damage = 2f;
     public float attackInterval = 1f;
     public float stoppingDistance = 1.2f;
@@ -11,6 +15,8 @@ public class MeleeEnemy : EnemyUnit
     private NavMeshAgent agent;
     private float attackTimer;
     private PlayerUnit currentTarget;
+
+    private bool isWalking;
 
     protected override void Awake()
     {
@@ -27,7 +33,7 @@ public class MeleeEnemy : EnemyUnit
 
     void UpdateTarget()
     {
-        PlayerUnit[] units = FindObjectsOfType<PlayerUnit>();
+        PlayerUnit[] units = FindObjectsByType<PlayerUnit>(FindObjectsSortMode.None);
 
         float closestDist = Mathf.Infinity;
         PlayerUnit closest = null;
@@ -48,6 +54,23 @@ public class MeleeEnemy : EnemyUnit
 
     void Move()
     {
+        if(agent.isStopped || agent.velocity.magnitude <= 0.1f)
+        {
+            if (isWalking)
+            {
+                onStop.Invoke();
+                isWalking = false;
+            }
+        }
+        else
+        {
+            if (!isWalking)
+            {
+                onWalk.Invoke();
+                isWalking = true;
+            }
+        }
+
         if (currentTarget == null) return;
 
         agent.stoppingDistance = stoppingDistance;

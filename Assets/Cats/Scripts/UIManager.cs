@@ -57,7 +57,7 @@ public class UIManager : MonoBehaviour
         if (GameManager.Instance == null || goldText == null)
             return;
 
-        goldText.text = "Gold: " + BaseUnit.Instance.storedGold;
+        goldText.text = "Gold: " + GameManager.Instance.gold;
     }
 
     // =========================

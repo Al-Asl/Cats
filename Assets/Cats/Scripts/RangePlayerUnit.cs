@@ -25,13 +25,15 @@ public class RangePlayerUnit : PlayerUnit
 
     EnemyUnit FindClosestEnemy()
     {
-        EnemyUnit[] enemies = FindObjectsOfType<EnemyUnit>();
+        EnemyUnit[] enemies = FindObjectsByType<EnemyUnit>(FindObjectsSortMode.None);
 
         EnemyUnit closest = null;
         float minDist = Mathf.Infinity;
 
         foreach (var enemy in enemies)
         {
+            if (!enemy.enabled) continue;
+
             float dist = Vector3.Distance(transform.position, enemy.transform.position);
 
             if (dist < range && dist < minDist)

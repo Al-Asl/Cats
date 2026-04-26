@@ -5,37 +5,24 @@ public class Projectile : MonoBehaviour
     public float speed = 10f;
     public float damage = 2f;
 
-    private Transform target;
+    private Vector3 dir;
 
     public void SetTarget(Transform t)
     {
-        target = t;
+        dir = (t.position - transform.position).normalized;
     }
 
     void Update()
     {
-        if (target == null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Vector3 dir = (target.position - transform.position).normalized;
         transform.position += dir * speed * Time.deltaTime;
-
-        if (Vector3.Distance(transform.position, target.position) < 0.2f)
-        {
-            Hit();
-        }
     }
 
-    void Hit()
+    private void OnTriggerEnter(Collider collider)
     {
-        if (target.TryGetComponent(out EnemyUnit enemy))
+        if(collider.transform.TryGetComponent(out EnemyUnit enemy))
         {
             enemy.TakeDamage(damage);
+            Destroy(gameObject);
         }
-
-        Destroy(gameObject);
     }
 }
