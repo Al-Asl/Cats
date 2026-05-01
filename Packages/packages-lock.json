@@ -1,5 +1,19 @@
 {
   "dependencies": {
+    "com.dbrizov.naughtyattributes": {
+      "version": "https://github.com/dbrizov/NaughtyAttributes.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "c46e45b61398d3c0ef4cff38c0f81ce40cf6d877"
+    },
+    "com.mackysoft.serializereference-extensions": {
+      "version": "https://github.com/mackysoft/Unity-SerializeReferenceExtensions.git?path=Assets/MackySoft/MackySoft.SerializeReferenceExtensions#1.7.0",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "1d388a4bba9235dfca394830ca186bb477e90901"
+    },
     "com.unity.2d.animation": {
       "version": "13.0.4",
       "depth": 0,
