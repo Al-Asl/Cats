@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using NaughtyAttributes;
 
 public enum LoopType
 {

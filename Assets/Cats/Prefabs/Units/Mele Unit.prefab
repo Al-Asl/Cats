@@ -9,11 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4843014416531620922}
-  - component: {fileID: 2477935998679820873}
+  - component: {fileID: 8785425280641240974}
   - component: {fileID: 7787145809461604663}
   - component: {fileID: 3627108364137714486}
+  - component: {fileID: 5278940004816259334}
   m_Layer: 0
-  m_Name: DPS
+  m_Name: AutoDamage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -34,8 +35,8 @@ Transform:
   m_Children: []
   m_Father: {fileID: 217034227554576163}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &2477935998679820873
-SphereCollider:
+--- !u!65 &8785425280641240974
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -53,8 +54,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1.726562, y: 1, z: 1}
+  m_Center: {x: -0.363281, y: 0, z: 0}
 --- !u!54 &7787145809461604663
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -95,9 +96,77 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageCollider
   team: 1
-  type: 0
-  amount: 1
-  period: 1
+  damageDealer:
+    rid: 6210732207230681455
+  references:
+    version: 2
+    RefIds:
+    - rid: 6210732207230681455
+      type: {class: AutoDamageDealer, ns: , asm: Assembly-CSharp}
+      data:
+        OnDealDamage:
+          m_PersistentCalls:
+            m_Calls: []
+        amount: 1
+        OnCharge:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 6299986694197391399}
+              m_TargetAssemblyTypeName: AnimatorSetStateFunction, Assembly-CSharp
+              m_MethodName: Run
+              m_Mode: 5
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: attack
+                m_BoolArgument: 0
+              m_CallState: 2
+            - m_Target: {fileID: 8817052384584780656}
+              m_TargetAssemblyTypeName: UnityEngine.AI.NavMeshAgent, UnityEngine
+              m_MethodName: set_isStopped
+              m_Mode: 6
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 1
+              m_CallState: 2
+        OnAttackEnd:
+          m_PersistentCalls:
+            m_Calls:
+            - m_Target: {fileID: 8817052384584780656}
+              m_TargetAssemblyTypeName: UnityEngine.AI.NavMeshAgent, UnityEngine
+              m_MethodName: set_isStopped
+              m_Mode: 6
+              m_Arguments:
+                m_ObjectArgument: {fileID: 0}
+                m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+                m_IntArgument: 0
+                m_FloatArgument: 0
+                m_StringArgument: 
+                m_BoolArgument: 0
+              m_CallState: 2
+        chargePeriod: 0.5
+        damagePeriod: 0.1
+        coolDownPeriod: 0.5
+--- !u!114 &5278940004816259334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2998007441961579985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e01a28925618474189f7a86ce13b1df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FixedRotation
+  forward: {x: 0, y: 0, z: 1}
+  up: {x: 0, y: 1, z: 0}
 --- !u!1 &3733307705776961238
 GameObject:
   m_ObjectHideFlags: 0
@@ -174,6 +243,8 @@ GameObject:
   - component: {fileID: 46440351818997911}
   - component: {fileID: 825550943042386225}
   - component: {fileID: 6299986694197391399}
+  - component: {fileID: 8190831507098554143}
+  - component: {fileID: 3383231187080497141}
   m_Layer: 0
   m_Name: Mushroom
   m_TagString: Untagged
@@ -310,7 +381,44 @@ MonoBehaviour:
   runConfig:
     runPoint: 0
     delay: 0
+  ifNot: []
   stateName: idle
+--- !u!114 &8190831507098554143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5976456584853592838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec150f64116a1e408d46aaeaae1ee74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatorSetStateFunction
+  runConfig:
+    runPoint: 0
+    delay: 0
+  ifNot:
+  - death
+  - attack
+  stateName: 
+--- !u!114 &3383231187080497141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5976456584853592838}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f636f115a222fbc4995b1dc6b2c408fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimatorSetBoolFunction
+  runConfig:
+    runPoint: 0
+    delay: 0
+  boolName: walking
+  value: 0
 --- !u!1 &8620932644845042513
 GameObject:
   m_ObjectHideFlags: 0
@@ -324,6 +432,7 @@ GameObject:
   - component: {fileID: 8739821498644345261}
   - component: {fileID: 8817052384584780656}
   - component: {fileID: 8964103177791716256}
+  - component: {fileID: 2114752917226690401}
   m_Layer: 0
   m_Name: Mele Unit
   m_TagString: Untagged
@@ -375,6 +484,42 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8817052384584780656}
+        m_TargetAssemblyTypeName: UnityEngine.AI.NavMeshAgent, UnityEngine
+        m_MethodName: set_isStopped
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 2114752917226690401}
+        m_TargetAssemblyTypeName: EventFunction, Assembly-CSharp
+        m_MethodName: Run
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 8190831507098554143}
+        m_TargetAssemblyTypeName: AnimatorSetStateFunction, Assembly-CSharp
+        m_MethodName: Run
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: hurt
+          m_BoolArgument: 1
         m_CallState: 2
   onDeath:
     m_PersistentCalls:
@@ -462,10 +607,10 @@ MonoBehaviour:
   onStop:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6299986694197391399}
-        m_TargetAssemblyTypeName: AnimatorSetStateFunction, Assembly-CSharp
+      - m_Target: {fileID: 3383231187080497141}
+        m_TargetAssemblyTypeName: AnimatorSetBoolFunction, Assembly-CSharp
         m_MethodName: Run
-        m_Mode: 5
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -477,17 +622,48 @@ MonoBehaviour:
   onWalk:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6299986694197391399}
-        m_TargetAssemblyTypeName: AnimatorSetStateFunction, Assembly-CSharp
+      - m_Target: {fileID: 3383231187080497141}
+        m_TargetAssemblyTypeName: AnimatorSetBoolFunction, Assembly-CSharp
         m_MethodName: Run
-        m_Mode: 5
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: walk
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
   team: 1
-  stoppingDistance: 2
+  offset: {x: 1.5, y: 0, z: 0}
+  stoppingDistance: 0
+--- !u!114 &2114752917226690401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8620932644845042513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eba1f9edd0a2b054c936e1a8f3429945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EventFunction
+  runConfig:
+    runPoint: 0
+    delay: 0.5
+  _Event:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8817052384584780656}
+        m_TargetAssemblyTypeName: UnityEngine.AI.NavMeshAgent, UnityEngine
+        m_MethodName: set_isStopped
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

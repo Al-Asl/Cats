@@ -130,5 +130,6 @@ public class PlacementManager : MonoBehaviour
 
         position.y = 0f;
         var go = Instantiate(entity.prefab, position, Quaternion.identity);
+        TeamUtility.SetTeam(go.gameObject, playerTeam);
     }
 }

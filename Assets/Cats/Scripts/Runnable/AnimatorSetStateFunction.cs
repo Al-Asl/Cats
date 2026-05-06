@@ -1,7 +1,10 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class AnimatorSetStateFunction : Runnable
 {
+    public List<string> ifNot;
+
     public string stateName;
 
     private Animator animator;
@@ -20,6 +23,9 @@ public class AnimatorSetStateFunction : Runnable
 
     protected override void RunInternal()
     {
+        foreach (var name in ifNot)
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName(name))
+                return;
         animator.Play(stateName, 0, 0f);
     }
 }

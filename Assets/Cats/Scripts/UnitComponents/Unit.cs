@@ -61,11 +61,14 @@ public class Unit : MonoBehaviour, ITeam
 
     public virtual void TakeDamage(float amount)
     {
-        currentHealth -= amount;
-        onTakeDamage.Invoke();
+        if(!dead)
+        {
+            currentHealth -= amount;
+            onTakeDamage.Invoke();
 
-        if (currentHealth <= 0 && !dead)
-            Die();
+            if (currentHealth <= 0)
+                Die();
+        }
     }
 
     protected virtual void Die()

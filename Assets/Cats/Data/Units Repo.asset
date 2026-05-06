@@ -16,3 +16,6 @@ MonoBehaviour:
   - name: Range
     price: 15
     prefab: {fileID: 9054513438894133593, guid: d12ca705b5505124289969aea58288da, type: 3}
+  - name: Worker
+    price: 10
+    prefab: {fileID: 2961719362647147060, guid: f4995249e161bb349b486f53b870d157, type: 3}

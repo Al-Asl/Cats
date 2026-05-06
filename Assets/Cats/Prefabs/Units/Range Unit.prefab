@@ -359,4 +359,5 @@ MonoBehaviour:
   runConfig:
     runPoint: 0
     delay: 0
+  ifNot: []
   stateName: Idle

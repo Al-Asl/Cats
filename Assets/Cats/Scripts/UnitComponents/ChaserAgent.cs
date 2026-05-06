@@ -10,6 +10,7 @@ public class ChaserAgent : MonoBehaviour, ITeam
     public UnityEvent onWalk;
 
     public Team team;
+    public Vector3 offset;
     public float stoppingDistance = 1.2f;
 
     private NavMeshAgent agent;
@@ -72,6 +73,6 @@ public class ChaserAgent : MonoBehaviour, ITeam
         if (target == null) return;
 
         agent.stoppingDistance = stoppingDistance;
-        agent.SetDestination(target.transform.position);
+        agent.SetDestination(target.transform.position + offset);
     }
 }

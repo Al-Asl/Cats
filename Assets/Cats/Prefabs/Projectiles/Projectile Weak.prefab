@@ -104,6 +104,7 @@ GameObject:
   - component: {fileID: 4185077266171262172}
   - component: {fileID: 2869787156597403785}
   - component: {fileID: 5257630991306408913}
+  - component: {fileID: -7164469386050730620}
   m_Layer: 0
   m_Name: Projectile Weak
   m_TagString: Untagged
@@ -203,9 +204,31 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DamageCollider
   team: 0
-  type: 1
-  amount: 1
-  period: 1
+  damageDealer:
+    rid: 6210732207230681453
+  references:
+    version: 2
+    RefIds:
+    - rid: 6210732207230681453
+      type: {class: OnContactDamageDealer, ns: , asm: Assembly-CSharp}
+      data:
+        amount: 1
+        type: 0
+--- !u!114 &-7164469386050730620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7182283822619371829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60fc6cf63211f5b4d8c61f4b96277c84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DestroyFunction
+  runConfig:
+    runPoint: 1
+    delay: 5
 --- !u!1 &8597072911890097435
 GameObject:
   m_ObjectHideFlags: 0
